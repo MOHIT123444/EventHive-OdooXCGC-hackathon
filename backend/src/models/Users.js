@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
 // pre-save hash password if modified
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-  const salt = await bcrypt.genSalt(10);
+  const salt = await bcrypt.genSalt(10); // encrypt data 
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
@@ -27,3 +27,5 @@ userSchema.methods.matchPassword = function (plain) {
 };
 
 module.exports = mongoose.model('User', userSchema);
+// module.exports = mongoose.model('User', userSchema);
+

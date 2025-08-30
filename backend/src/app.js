@@ -20,6 +20,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 
 // mount API routers under /api
+// app.use('/api', (req, res, next) => {
+//   console.log(`API request: ${req.method} ${req.originalUrl}`);
+//   next();
+// }); // Log api requests
+
+
 app.use('/api/auth', authRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/payments', paymentRoutes);
