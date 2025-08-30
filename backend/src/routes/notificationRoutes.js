@@ -8,15 +8,3 @@ const { requireAuth, requireRole } = require('../middlewares/authMiddleware');
 router.post('/', requireAuth(), requireRole('admin','manager'), notificationController.createNotification);
 
 module.exports = router;
-
-// 
-
-// const express = require('express');
-// const router = express.Router();
-const notificationController = require('../controllers/notificationController');
-const { protect } = require('../middlewares/authMiddleware');
-
-router.get('/', protect, notificationController.getNotifications);
-router.post('/', protect, notificationController.sendNotification);
-
-module.exports = router;

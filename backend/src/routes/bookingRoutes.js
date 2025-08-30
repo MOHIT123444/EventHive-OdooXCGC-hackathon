@@ -19,6 +19,7 @@ module.exports = router;
 // Admin: get all bookings with optional filters
 // router.get('/', requireAuth(), requireRole('admin'), bookingController.getAllBookings);
 
+
 // const express = require('express');
 // const router = express.Router();
 const bookingController = require('../controllers/bookingController');
@@ -34,3 +35,4 @@ router.get('/', protect, bookingController.getUserBookings);
 router.get('/all', protect, bookingController.getAllBookings);
 
 module.exports = router;
+
