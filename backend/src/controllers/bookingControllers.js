@@ -53,5 +53,39 @@ exports.cancelBooking = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+
 };
 // Admin: get all bookings with optional filters
+
+const bookingService = require('../services/bookingService');
+
+async function createBooking(req, res, next) {
+  try {
+    const { eventId, seats } = req.body;
+    const booking = await bookingService.createBooking(req.user._id, eventId, seats);
+    res.status(201).json({ success: true, booking });
+  } catch (err) {
+    next(err);
+  }
+}
+
+//User booking 
+async function getUserBookings(req, res, next) {
+  try {
+    const bookings = await bookingService.getUserBookings(req.user._id);
+    res.json({ success: true, bookings });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getAllBookings(req, res, next) {
+  try {
+    const bookings = await bookingService.getAllBookings();
+    res.json({ success: true, bookings });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { createBooking, getUserBookings, getAllBookings };

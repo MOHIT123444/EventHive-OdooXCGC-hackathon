@@ -49,3 +49,28 @@ exports.confirmPayment = async (req, res, next) => {
     next(err);
   }
 };
+
+// Payment service integrated. 
+const paymentService = require('../services/paymentService');
+
+async function createOrder(req, res, next) {
+  try {
+    const { bookingId, amount } = req.body;
+    const payment = await paymentService.createPayment(bookingId, amount);
+    res.status(201).json({ success: true, payment });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function verifyPayment(req, res, next) {
+  try {
+    const { paymentId } = req.body;
+    const payment = await paymentService.verifyPayment(paymentId);
+    res.json({ success: true, payment });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { createOrder, verifyPayment };

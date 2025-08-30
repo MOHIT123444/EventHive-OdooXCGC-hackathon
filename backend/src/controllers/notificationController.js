@@ -28,3 +28,27 @@ exports.getUserNotifications = async (req, res, next) => {
     next(err);
   }
 };
+
+// 
+const notificationService = require('../services/notificationService');
+
+async function sendNotification(req, res, next) {
+  try {
+    const { userId, title, message } = req.body;
+    const notification = await notificationService.createNotification(userId, title, message);
+    res.status(201).json({ success: true, notification });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getNotifications(req, res, next) {
+  try {
+    const notifications = await notificationService.getUserNotifications(req.user._id);
+    res.json({ success: true, notifications });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { sendNotification, getNotifications };
