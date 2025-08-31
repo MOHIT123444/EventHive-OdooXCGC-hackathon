@@ -1,6 +1,7 @@
 # EventHive - Event Management System
 
 A full-stack event management application built with Node.js, Express, MongoDB backend and React frontend.
+[Video link](https://drive.google.com/file/d/1kGh1ikvjawmGTTSqL8eDt0B-ylokwkaT/view?usp=sharing)
 
 ## 🚀 Features
 
