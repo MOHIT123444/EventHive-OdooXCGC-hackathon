@@ -1,15 +1,16 @@
 
 
+const morgan = require('morgan');
 require('dotenv').config();
 
 require('express-async-errors'); // catches async route errors and forwards to error handler
 
 const http = require('http');
-const app = require('./app'); 
+const app = require('./backend/src/app'); 
 const listEndpoints = require('express-list-endpoints');
 console.log(listEndpoints(app));
            // <-- must resolve to backend/src/app.js
-const connectDB = require('./config/db');
+const connectDB = require('./backend/src/config/db');
 
 const PORT = process.env.PORT || 5000;
 const server = http.createServer(app);

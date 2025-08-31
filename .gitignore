@@ -1,36 +1,3 @@
-# Node modules
 node_modules/
-
-# .env files (sensitive information)
-.env
-
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Dependency directories
-jspm_packages/
-
-# OS-specific files
-.DS_Store
-Thumbs.db
-
-# IDE/Editor settings (add your editor's specific files here if needed)
-.vscode/
-.idea/
-
-# Build directories (if you're using build tools like Webpack, Babel, etc.)
+.env/
 dist/
-build/
-coverage/
-
-# Testing & coverage
-*.lcov
-coverage/
-
-# Package-lock and yarn.lock (optional, depending on your needs)
-package-lock.json
-yarn.lock

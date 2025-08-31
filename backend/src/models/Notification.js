@@ -1,13 +1,10 @@
-const Notification = require('../models/Notification');
+const mongoose = require('mongoose');
 
-async function createNotification(userId, title, message) {
-  const notification = new Notification({ user: userId, title, message });
-  await notification.save();
-  return notification;
-}
+const notificationSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  message: { type: String, required: true },
+  read: { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now }
+});
 
-async function getUserNotifications(userId) {
-  return Notification.find({ user: userId }).sort({ createdAt: -1 });
-}
-
-module.exports = { createNotification, getUserNotifications };
+module.exports = mongoose.model('Notification', notificationSchema);

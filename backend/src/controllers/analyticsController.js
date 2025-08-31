@@ -22,6 +22,6 @@ exports.getEventAnalytics = async (req, res, next) => {
 };
 
 // helper to emit - in your actual app you'll integrate socket utility
-exports.emitAnalyticsUpdate = async function (eventId) {
-  // placeholder: you can require socket util and emit updates when bookings change
-};
+// exports.emitAnalyticsUpdate = async function (eventId) {
+//   // placeholder: you can require socket util and emit updates when bookings change
+// };

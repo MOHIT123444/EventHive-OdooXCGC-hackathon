@@ -1,29 +1,41 @@
-
-const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 
-function signToken(user) {
-  return jwt.sign({ id: user._id.toString(), email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '12h' });
-}
+const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
 exports.register = async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
-    if (!name || !email || !password) return res.status(400).json({ error: true, message: 'Missing fields' });
-
-    const exists = await User.findOne({ email });
-    if (exists) return res.status(400).json({ error: true, message: 'Email already used' });
-
-    const user = new User({ name, email, password, role });
-    await user.save(); // uses MongoDB here
-    const token = signToken(user);
-
-    res.status(201).json({
-      success: true,
-      data: { id: user._id, name: user.name, email: user.email, role: user.role },
-      token
-    });
+    
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ 
+        error: true, 
+        message: 'User with this email already exists. Please use a different email or try logging in.' 
+      });
+    }
+    
+    const user = await User.create({ name, email, password, role });
+    res.status(201).json({ success: true, data: { user, token: generateToken(user._id) } });
   } catch (err) {
+    // Handle MongoDB validation errors
+    if (err.code === 11000) {
+      return res.status(400).json({ 
+        error: true, 
+        message: 'User with this email already exists. Please use a different email or try logging in.' 
+      });
+    }
+    
+    // Handle other validation errors
+    if (err.name === 'ValidationError') {
+      const messages = Object.values(err.errors).map(val => val.message);
+      return res.status(400).json({ 
+        error: true, 
+        message: messages.join(', ') 
+      });
+    }
+    
     next(err);
   }
 };
@@ -31,24 +43,23 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ error: true, message: 'Missing fields' });
-
     const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ success: false, message: 'Invalid credentials' });
-
-    const ok = await user.matchPassword(password);
-    if (!ok) return res.status(401).json({ success: false, message: 'Invalid credentials' });
-
-    const token = signToken(user);
-    res.json({ success: true, token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
+    if (!user || !(await user.matchPassword(password))) {
+      return res.status(401).json({ error: true, message: 'Invalid credentials' });
+    }
+    res.json({ success: true, data: { user, token: generateToken(user._id) } });
   } catch (err) {
     next(err);
   }
 };
 
-exports.profile = async (req, res, next) => {
+exports.getProfile = async (req, res, next) => {
   try {
-    res.json({ success: true, data: req.user });
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ error: true, message: 'User not found' });
+    }
+    res.json({ success: true, data: { user } });
   } catch (err) {
     next(err);
   }
