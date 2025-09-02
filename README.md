@@ -125,7 +125,7 @@ concurrently "cd backend && npm run dev" "cd frontend && npm run dev"
 
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:5000/api
-- **MongoDB**: mongodb://localhost:27017/eventhive
+
 
 ## 🔐 Default Users
 
@@ -220,7 +220,7 @@ show collections
 
 ### Backend (.env)
 ```env
-MONGO_URI=mongodb://localhost:27017/eventhive
+MONGO_URI=paste your mongodb connection string. 
 JWT_SECRET=your-secret-key
 PORT=5000
 NODE_ENV=development
